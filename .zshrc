@@ -90,11 +90,15 @@ export EDITOR='vim'
 
 # Compilation flags
 #export ARCHFLAGS="-arch x86_64"
+export CC="/usr/bin/clang-9"
+export CXX="/usr/bin/clang++-9"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/include/c++/8"
 
 fpath+=("$HOME/.zsh/pure")
 autoload -Uz promptinit 
 promptinit
 prompt pure
+
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -114,6 +118,6 @@ alias gu="git remote update --prune"
 alias mk="make -j2"
 alias pip="pip3"
 alias open="nautilus --browser"
-alias view="zathura"
+alias view="screen -d -m zathura"
 alias jan="cd ~/JANIS && janis.sh"
 alias config='/usr/bin/git --git-dir=/home/kyle/.cfg/ --work-tree=/home/kyle'
