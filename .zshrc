@@ -7,7 +7,7 @@ export ZSH="/home/kyle/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME=""
+ZSH_THEME="dracula"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -67,7 +67,7 @@ ENABLE_CORRECTION="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git dropbox)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -81,7 +81,7 @@ cd $current
 
 
 # export MANPATH="/usr/local/man:$MANPATH"
-export PATH="/home/linuxbrew/.linuxbrew/bin/:/home/kyle/geant4/geant4.10.06-install/bin:/home/kyle/SageMath:/home/kyle/JANIS:$PATH/"
+source ~/.env
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
@@ -90,15 +90,18 @@ export EDITOR='vim'
 
 # Compilation flags
 #export ARCHFLAGS="-arch x86_64"
-export CC="/usr/bin/clang-9"
-export CXX="/usr/bin/clang++-9"
+export CC="/usr/bin/gcc-9"
+export CXX="/usr/bin/g++-9"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/include/c++/8"
 
+#pure
 fpath+=("$HOME/.zsh/pure")
 autoload -Uz promptinit 
 promptinit
 prompt pure
 
+#tmux
+#tmux source ~/.tmux.conf
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -121,3 +124,20 @@ alias open="nautilus --browser"
 alias view="screen -d -m zathura"
 alias jan="cd ~/JANIS && janis.sh"
 alias config='/usr/bin/git --git-dir=/home/kyle/.cfg/ --work-tree=/home/kyle'
+alias present="pdfpc" 
+alias cisco="~/vpn/anyconnect-linux64-4.7.04056-predeploy-k9/anyconnect-linux64-4.7.04056/vpn/vpn"
+alias wttr="curl wttr.in"
+alias vnc="~/vnc/VNC-Viewer-6.20.529-Linux-x64"
+
+#user functions
+ldir () {
+  if [ "$1" != "" ]
+  then 
+    ls -la "$1" | grep "^d" && ls -la | grep -v "^d"
+  else 
+    ls -la ./ | grep "^d" && ls -la | grep -v "^d"
+  fi
+}
+
+# syntax
+source /home/kyle/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

@@ -33,7 +33,7 @@ floating_modifier $mod
 bindsym $mod+Return exec gnome-terminal
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
@@ -148,22 +148,38 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #i
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
+# toggle workspace between windows
+bindsym $mod+x move workspace to output down
+bindsym $mod+z move workspace to output up
+bindsym $mod+m move workspace to output left
+bindsym $mod+n move workspace to output right
+
+set $speaker_handle alsa_output.pci-0000_00_1b.0.analog-stereo
+bindsym $mod+o exec "pactl -- set-sink-volume $speaker_handle -5%"
+bindsym $mod+p exec "pactl -- set-sink-volume $speaker_handle +5%"
+
 # Sreen brightness controls
-mode "controls" {
+set $mode_controls Controls (j) brightness++, (k) brightness-- (o) volume-- (p) volume++ (v) pavucontrol (Enter/Space/Esc) exit
+mode "$mode_controls" {
         # These bindings trigger as soon as you enter the control mode
         bindsym j exec "~/Scripts/brightness.sh -"
         bindsym k exec "~/Scripts/brightness.sh +"
+        # binding to open pavucontrol
+        bindsym v exec "pavucontrol"
         # back to normal: Enter or Escape
         bindsym Return mode "default"
         bindsym space mode "default"
+        bindsym Escape mode "default"
+        bindsym o exec "pactl -- set-sink-volume $speaker_handle -5%"
+        bindsym p exec "pactl -- set-sink-volume $speaker_handle +5%"
 }
 
-bindsym $mod+shift+semicolon mode "controls"
+bindsym $mod+shift+semicolon mode "$mode_controls"
 
 # lock/logout & shit
 set $Locker i3lock -c 000000 && sleep 1 && xset dpms force suspend && sleep 1
 
-set $mode_system System (l) lock, kill (s) suspend, (r) reboot, (Shift+s) shutdown
+set $mode_system System (l) lock, (s) suspend, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
     bindsym l exec --no-startup-id $Locker, mode "default"
     bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
@@ -176,9 +192,22 @@ mode "$mode_system" {
 }
 
 bindsym $mod+Tab mode "$mode_system"
-
+bindsym $mod+shift+l exec llnlvpn
+bindsym $mod+u exec umvpn
+bindsym $mod+shift+k exec cisco disconnect
 ###### at startup ####
 # auto lock
-exec xautolock -time 5 -corners -+00 -cornerdelay 10 -cornersize 15 -cornerredelay 60 -detectsleep -locker ~/.config/i3/locker.sh
+exec xautolock -time 15000 -corners -+00 -cornerdelay 10 -cornersize 50 -cornerredelay 60 -detectsleep -locker ~/.config/i3/locker.sh
 # go to last brightness
 exec "~/Scripts/brightness.sh -"
+exec xrandr --output HDMI-1 --left-of eDP-1 --rotate normal # hdmi screen
+#exec xrandr --auto                    
+exec "bluetoothctl connect DC:2C:26:E7:5F:5B"  # connect keychron
+
+## shortcuts to open shit
+# chrome
+bindsym $mod+c exec  google-chrome-stable --enable-features=WebUIDarkMode --force-dark-mode
+bindsym $mod+Shift+s exec  firefox
+
+#set window types
+for_window [class="Nautilus"] floating enable, move position center, resize set height 50, resize set width 100
